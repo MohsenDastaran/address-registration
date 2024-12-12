@@ -1,10 +1,9 @@
   <h3 align="center">Achareh App</h3>
 
   <p align="center">
-    feature-rich table listing the submitted orders
+    feature-rich address registration app
     <br />
     <br />
-    <a href="https://shadcn-table.netlify.app/">View Demo</a>
   </p>
 </div>
 

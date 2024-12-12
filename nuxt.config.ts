@@ -3,7 +3,7 @@ import { SITE_NAME, SITE_TITLE } from "./app/utils/seo";
 export default defineNuxtConfig({
   experimental: { typedPages: true },
   future: { compatibilityVersion: 4 },
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   tailwindcss: {
     exposeConfig: true,
     editorSupport: true,
