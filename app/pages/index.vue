@@ -41,6 +41,9 @@
         </div>
       </form>
       <!-- </div> -->
+      <!-- <ClientOnly> -->
+      <MapComponent />
+      <!-- </ClientOnly> -->
     </UiContainer>
   </div>
 </template>
