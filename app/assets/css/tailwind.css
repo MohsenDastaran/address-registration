@@ -34,6 +34,9 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
     --sidebar-input: 240 3.7% 15.9%;
     --sidebar-input: 240 5.9% 90%;
+    --tw-ring-color: #00bfa5;
+    --tw-ring-shadow: #00bfa5;
+    --tw-shadow: #00bfa5 !important;
   }
 
   .dark {
@@ -76,7 +79,10 @@
     @apply antialiased;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+}
+.focus-visible\:ring-ring:focus-visible {
+  --tw-ring-color: var(--achareh) !important;
 }
