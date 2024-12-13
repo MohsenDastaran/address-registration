@@ -15,6 +15,9 @@
 html {
   background-color: #f5f5f5;
 }
+#__nuxt {
+  overflow-x: hidden;
+}
 /* Define Font Faces */
 
 @font-face {

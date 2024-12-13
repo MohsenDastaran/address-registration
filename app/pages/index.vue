@@ -6,22 +6,22 @@
       <section v-if="stepper === 0">
         <p>لطفا مشخصات و آدرس خود را وارد کنید</p>
         <form @submit="onFormSubmit" class="my-4 flex w-full flex-col flex-wrap md:flex-row">
-          <Field name="firstName" v-slot="{ componentField }">
+          <Field name="first_name" v-slot="{ componentField }">
             <UiFormItem class="mb-5 w-full md:w-4/12" label="نام">
               <UiInput class="" v-bind="componentField" placeholder="مثال:‌ محمد" />
             </UiFormItem>
           </Field>
-          <Field name="lastName" v-slot="{ componentField }">
+          <Field name="last_name" v-slot="{ componentField }">
             <UiFormItem class="mb-5 w-full md:w-4/12" label="نام خانوادگی">
               <UiInput class="" v-bind="componentField" placeholder="مثال:‌ رضایی" />
             </UiFormItem>
           </Field>
-          <Field name="cellPhone" v-slot="{ componentField }">
+          <Field name="coordinate_mobile" v-slot="{ componentField }">
             <UiFormItem class="mb-5 w-full md:w-4/12" label="شماره تلفن همراه">
               <UiInput class="" v-bind="componentField" placeholder="مثال: ۰۹۱۲۱۲۳۴۵۶۸۷" />
             </UiFormItem>
           </Field>
-          <Field name="phone" v-slot="{ componentField }">
+          <Field name="coordinate_phone_number" v-slot="{ componentField }">
             <UiFormItem
               class="mb-5 w-full md:w-4/12"
               label="شماره تلفن ثابت (اختیاری)"
@@ -99,17 +99,17 @@
   const { handleSubmit } = useForm({
     validationSchema: toTypedSchema(
       z.object({
-        firstName: z
+        first_name: z
           .string({
             required_error: "پر کردن این فیلد الزامی است",
           })
           .min(3, "نام باید دارای ۳ کرکتر باشد"),
-        lastName: z
+        last_name: z
           .string({
             required_error: "پر کردن این فیلد الزامی است",
           })
           .min(3, "نام خانوادگی باید دارای ۳ کرکتر باشد"),
-        cellPhone: z
+        coordinate_mobile: z
           .string({
             required_error: "پر کردن این فیلد الزامی است",
           })
@@ -118,7 +118,7 @@
             /(^09[0-9]{9}$)|(^\u06F0\u06F9[\u06F0-\u06F9]{9})$/,
             "شماره تلفن همراه نامعتبر است!"
           ),
-        phone: z.string().optional(),
+        coordinate_phone_number: z.string().optional(),
         address: z
           .string({
             required_error: "پر کردن این فیلد الزامی است",
@@ -132,16 +132,30 @@
   const onFormSubmit = handleSubmit((values) => {
     console.log(values);
     formValues.value = values;
-    push.success({
-      // title: "Success",
-      message: "مشخصات با موفقیت ثبت شد",
-      // duration: Infinity,
-    });
     stepper.value++;
   });
   const onSubmit = (coords: number[]) => {
-    console.log({ coords, ...formValues.value });
-    stepper.value++;
+    const payload = {
+      region: "1",
+      lng: coords[0]?.toString(),
+      lat: coords[1]?.toString(),
+      ...formValues.value,
+    };
+    console.log(payload);
+
+    api
+      .post("address", payload)
+      .then(() => {
+        stepper.value++;
+        push.success({
+          message: "مشخصات با موفقیت ثبت شد",
+        });
+      })
+      .catch(() => {
+        push.error({
+          title: "خطا",
+          message: "خطایی رخ داده است",
+        });
+      });
   };
 </script>
-<style scoped></style>
