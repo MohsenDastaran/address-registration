@@ -10,7 +10,9 @@
   </div>
   <div class="fixed bottom-0 right-0 w-full">
     <UiContainer class="rounded bg-white py-5">
-      <UiButton class="bg-achareh w-full" @click="onSubmit">ثبت و ادامه</UiButton>
+      <UiButton class="bg-achareh w-full" @click="onSubmit">
+        <slot />
+      </UiButton>
     </UiContainer>
   </div>
 </template>

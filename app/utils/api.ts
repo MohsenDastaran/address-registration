@@ -1,9 +1,4 @@
-import { ElLoading } from "element-plus";
 import { ofetch } from "ofetch";
-
-import "element-plus/theme-chalk/el-loading.css";
-import "element-plus/theme-chalk/base.css";
-import "element-plus/theme-chalk/el-overlay.css";
 
 enum APIMETHODSTYPES {
   GET = "get",
@@ -23,10 +18,6 @@ type ApiRequestData = {
 
 const useApi = (data: ApiRequestData) =>
   new Promise((resolve, reject) => {
-    const loadingInstance = ElLoading.service(
-      data.element ? { target: data.element } : { fullscreen: true }
-    );
-
     let url = data.url.startsWith("http")
       ? data.url
       : `https://stage.achareh.ir/api/karfarmas/${data.url}`;
@@ -47,10 +38,7 @@ const useApi = (data: ApiRequestData) =>
       .then((res: unknown) => {
         resolve(res);
       })
-      .catch((err) => reject(err.data))
-      .finally(() => {
-        loadingInstance.close();
-      });
+      .catch((err) => reject(err.data));
   });
 
 export const api = {

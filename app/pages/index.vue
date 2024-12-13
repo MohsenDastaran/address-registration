@@ -82,7 +82,10 @@
             </div>
           </UiContainer>
         </div>
-        <MapComponent @submit="onSubmit" />
+        <MapComponent @submit="onSubmit">
+          <ThreeDotsLoader v-if="loader" isWhite />
+          <p v-else>ثبت و ادامه</p>
+        </MapComponent>
       </section>
       <SuccessPage v-if="stepper === 2" />
     </UiContainer>
@@ -93,6 +96,8 @@
 
 <script lang="ts" setup>
   import { z } from "zod";
+
+  const loader = ref(false);
 
   const formValues = ref({});
   const stepper = ref(0);
@@ -142,7 +147,7 @@
       ...formValues.value,
     };
     console.log(payload);
-
+    loader.value = true;
     api
       .post("address", payload)
       .then(() => {
@@ -156,6 +161,7 @@
           title: "خطا",
           message: "خطایی رخ داده است",
         });
-      });
+      })
+      .finally(() => (loader.value = false));
   };
 </script>

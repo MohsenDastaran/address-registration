@@ -1,5 +1,6 @@
 <template>
   <ConfigProvider :use-id="useIdFunction">
+    <LoadingOverlay :isLoading="loaderStore.isLoading" />
     <div>
       <NuxtLoadingIndicator />
       <NuxtLayout>
@@ -13,7 +14,10 @@
 </template>
 
 <script setup lang="ts">
+  import { useUserStore } from "@/stores/loader";
   import { ConfigProvider } from "radix-vue";
+
+  const loaderStore = useUserStore();
 
   const useIdFunction = () => useId()!;
 </script>

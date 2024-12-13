@@ -17,7 +17,12 @@
 </template>
 
 <script setup>
+  import { useUserStore } from "@/stores/loader";
+
+  const loaderStore = useUserStore();
+
   const addresses = ref([]);
+  loaderStore.setIsLoading(true);
 
   api
     .get("address")
@@ -27,7 +32,8 @@
         title: "خطا",
         message: "خطایی رخ داده است",
       });
-    });
+    })
+    .finally(() => loaderStore.setIsLoading(false));
 </script>
 
 <style scoped>
