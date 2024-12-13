@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Notivue v-slot="item">
+    <Notivue style="direction: ltr" v-slot="item">
       <NotivueSwipe :item="item">
         <Notifications :theme="theme" :item="item" :icons="icons" />
       </NotivueSwipe>

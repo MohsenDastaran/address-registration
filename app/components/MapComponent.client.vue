@@ -4,7 +4,9 @@
     <div id="map" ref="map" class="map"></div>
 
     <!-- GPS Button -->
-    <button class="gps-button" @click="findUserLocation">📍 Find My Location</button>
+    <button class="gps-button" @click="findUserLocation">
+      <img src="@/assets/location.png" alt="Location" />
+    </button>
   </div>
 </template>
 <script setup>
@@ -123,19 +125,14 @@
 </script>
 
 <style scoped>
-  .map {
-    height: 100%;
-    width: 100%;
-    min-height: 400px; /* Ensures it renders */
-  }
-
   .map-container {
-    height: 500px; /* Adjust the height as needed */
+    height: 70vh; /* Adjust the height as needed */
     position: relative;
   }
 
   .map {
-    height: 500px;
+    height: 100%;
+    min-height: 400px; /* Ensures it renders */
     width: 100%;
   }
 
@@ -150,5 +147,7 @@
     padding: 10px 15px;
     font-size: 18px;
     cursor: pointer;
+    width: 58px;
+    height: 58px;
   }
 </style>

@@ -55,3 +55,14 @@ html {
   background: #fff;
   width: 6px;
 }
+
+.Notivue__notification {
+  direction: ltr !important;
+}
+.aspect-square {
+  color: var(--achareh) !important;
+  border-color: var(--achareh) !important;
+}
+.ol-control {
+  translate: 0 60px !important;
+}
