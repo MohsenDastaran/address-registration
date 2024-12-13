@@ -4,6 +4,7 @@
     feature-rich address registration app
     <br />
     <br />
+      <a href="https://md-address-registration.netlify.app/">View Demo</a>
   </p>
 </div>
 
