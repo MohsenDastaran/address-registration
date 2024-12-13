@@ -6,8 +6,12 @@
           <img style="scale: 0.9" src="@/assets/achare.png" alt="Achareh" />
         </NuxtLink>
         <div>
-          <NuxtLink class="me-2" to="/">ثبت آدرس </NuxtLink>
-          <NuxtLink class="text-achareh" to="/registered">مشاهده آدرس‌ها </NuxtLink>
+          <NuxtLink :class="{ 'text-achareh': route.name !== 'index' }" class="me-2" to="/"
+            >ثبت آدرس
+          </NuxtLink>
+          <NuxtLink :class="{ 'text-achareh': route.name !== 'registered' }" to="/registered"
+            >مشاهده آدرس‌ها
+          </NuxtLink>
         </div>
       </UiContainer>
     </UiNavbar>
@@ -16,6 +20,8 @@
 </template>
 
 <script lang="ts" setup>
+  const route = useRoute();
+
   const colorMode = useColorMode();
   // const setTheme = (val: string) => {
   colorMode.preference = "light";
