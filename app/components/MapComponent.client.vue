@@ -8,9 +8,15 @@
       <img src="@/assets/location.png" alt="Location" />
     </button>
   </div>
+  <div class="fixed bottom-0 right-0 w-full">
+    <UiContainer class="rounded bg-white py-5">
+      <UiButton class="bg-achareh w-full" @click="onSubmit">ثبت و ادامه</UiButton>
+    </UiContainer>
+  </div>
 </template>
+
 <script setup>
-  import { onMounted, ref } from "vue";
+  import { nextTick, onMounted, ref } from "vue";
 
   import "ol/ol.css";
 
@@ -27,9 +33,11 @@
 
   const map = ref(null);
   const markerLayer = ref(null);
+  const userCoordinates = ref([]);
+  const emit = defineEmits(["submit"]);
+
   onMounted(() => {
     nextTick(() => {
-      // setTimeout(() => {
       try {
         // Initialize the map
         map.value = new Map({
@@ -44,34 +52,34 @@
             zoom: 13,
           }),
         });
+
+        // Add a layer for markers
+        const vectorSource = new VectorSource();
+        markerLayer.value = new VectorLayer({
+          source: vectorSource,
+          style: new Style({
+            image: new Icon({
+              src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Custom Marker Icon
+              scale: 0.05,
+            }),
+          }),
+        });
+        map.value.addLayer(markerLayer.value);
+
+        // Add a click event to add a marker and log location
+        map.value.on("click", (event) => {
+          const coordinates = event.coordinate;
+          userCoordinates.value = coordinates;
+          // Add a marker at the clicked location
+          const feature = new Feature({
+            geometry: new Point(coordinates),
+          });
+          markerLayer.value.getSource().clear(); // Clear previous markers
+          markerLayer.value.getSource().addFeature(feature);
+        });
       } catch (error) {
         console.error("Error initializing the map:", error);
       }
-
-      // Add a layer for markers
-      const vectorSource = new VectorSource();
-      markerLayer.value = new VectorLayer({
-        source: vectorSource,
-        style: new Style({
-          image: new Icon({
-            src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Custom Marker Icon
-            scale: 0.05,
-          }),
-        }),
-      });
-      map.value.addLayer(markerLayer.value);
-
-      // Add a click event to add a marker
-      map.value.on("click", (event) => {
-        const coordinates = event.coordinate;
-
-        // Add a marker at the clicked location
-        const feature = new Feature({
-          geometry: new Point(coordinates),
-        });
-        markerLayer.value.getSource().clear(); // Clear previous markers
-        markerLayer.value.getSource().addFeature(feature);
-      });
     });
   });
 
@@ -82,6 +90,14 @@
         (position) => {
           const { latitude, longitude } = position.coords;
           const userLocation = fromLonLat([longitude, latitude]);
+
+          console.log("User's GPS location:", {
+            coords: [longitude, latitude],
+            latitude,
+            longitude,
+          });
+
+          userCoordinates.value = [longitude, latitude];
 
           // Update the map's view
           map.value.getView().setCenter(userLocation);
@@ -95,7 +111,6 @@
           markerLayer.value.getSource().addFeature(feature);
         },
         (error) => {
-          // Handle different error scenarios
           let errorMessage = "Unable to retrieve your location.";
           switch (error.code) {
             case error.PERMISSION_DENIED:
@@ -110,7 +125,9 @@
             default:
               errorMessage = "An unknown error occurred.";
           }
-          alert(errorMessage);
+          push.error({
+            message: errorMessage,
+          });
         },
         {
           enableHighAccuracy: true, // Try to get the most accurate location
@@ -119,8 +136,12 @@
         }
       );
     } else {
+      console.error("Geolocation API not supported.");
       alert("Geolocation is not supported by your browser.");
     }
+  };
+  const onSubmit = () => {
+    emit("submit", userCoordinates.value);
   };
 </script>
 

@@ -73,7 +73,7 @@
                 @click="stepper--"
                 class="cursor-pointer"
                 src="@/assets/arrow.png"
-                style="height: 20px; width: 20px"
+                style="height: 20px; width: 24px"
                 alt="Arrow"
               />
               <p class="hidden md:flex">موقعیت مورد نظر خود را روی نقشه مشخص کنید</p>
@@ -82,13 +82,9 @@
             </div>
           </UiContainer>
         </div>
-        <MapComponent />
-        <div class="fixed bottom-0 right-0 w-full">
-          <UiContainer class="rounded bg-white py-5">
-            <UiButton class="bg-achareh w-full" @click="onSubmit">ثبت و ادامه</UiButton>
-          </UiContainer>
-        </div>
+        <MapComponent @submit="onSubmit" />
       </section>
+      <SuccessPage v-if="stepper === 2" />
     </UiContainer>
   </div>
 </template>
@@ -98,8 +94,8 @@
 <script lang="ts" setup>
   import { z } from "zod";
 
+  const formValues = ref({});
   const stepper = ref(0);
-
   const { handleSubmit } = useForm({
     validationSchema: toTypedSchema(
       z.object({
@@ -117,7 +113,11 @@
           .string({
             required_error: "پر کردن این فیلد الزامی است",
           })
-          .min(3, "شماره تلفن همراه باید دارای ۳ کرکتر باشد"),
+          .min(3, "شماره تلفن همراه باید دارای ۳ کرکتر باشد")
+          .regex(
+            /(^09[0-9]{9}$)|(^\u06F0\u06F9[\u06F0-\u06F9]{9})$/,
+            "شماره تلفن همراه نامعتبر است!"
+          ),
         phone: z.string().optional(),
         address: z
           .string({
@@ -131,6 +131,7 @@
 
   const onFormSubmit = handleSubmit((values) => {
     console.log(values);
+    formValues.value = values;
     push.success({
       // title: "Success",
       message: "مشخصات با موفقیت ثبت شد",
@@ -138,8 +139,9 @@
     });
     stepper.value++;
   });
-  const onSubmit = () => {
-    console.log("values");
+  const onSubmit = (coords: number[]) => {
+    console.log({ coords, ...formValues.value });
+    stepper.value++;
   };
 </script>
 <style scoped></style>
